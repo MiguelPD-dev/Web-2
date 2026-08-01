@@ -1,83 +1,86 @@
-// 1. Vetor de Objetos para armazenamento na memória local (JSON)
-const listaAlunos = [];
+// Vetor vazio para guardar os objetos dos alunos
+var vetorAlunos = [];
 
-// 2. Mapeamento de Elementos do DOM
-const formAluno = document.getElementById('form-aluno');
-const corpoTabela = document.getElementById('corpo-tabela');
-const elTotalAlunos = document.getElementById('total-alunos');
-const elMediaGeral = document.getElementById('media-geral');
+// Função que é ativada quando clica no botão "Salvar Aluno"
+function cadastrarAluno() {
+    // 1. Pegar os valores que o usuário digitou nas caixinhas
+    var inputNome = document.getElementById('nome').value;
+    var inputMatricula = document.getElementById('matricula').value;
+    var inputCurso = document.getElementById('curso').value;
+    var inputPeriodo = document.getElementById('periodo').value;
+    var inputMedia = document.getElementById('media').value;
 
-// 3. Ovinte de Evento para o Formulário de Cadastro
-formAluno.addEventListener('submit', function (event) {
-    // Evita o recarregamento padrão da página ao enviar o formulário
-    event.preventDefault();
-
-    // Captura e formatação dos valores dos campos
-    const nome = document.getElementById('nome').value.trim();
-    const matricula = document.getElementById('matricula').value.trim();
-    const curso = document.getElementById('curso').value.trim();
-    const periodo = parseInt(document.getElementById('periodo').value);
-    const media = parseFloat(document.getElementById('media').value);
-
-    // Criação do objeto individual do aluno
-    const novoAluno = {
-        nome: nome,
-        matricula: matricula,
-        curso: curso,
-        periodo: periodo,
-        media: media
+    // 2. Criar o objeto do aluno com as informações (JSON)
+    var aluno = {
+        nome: inputNome,
+        matricula: inputMatricula,
+        curso: inputCurso,
+        periodo: inputPeriodo,
+        media: parseFloat(inputMedia) // Garante que a média seja número com vírgula
     };
 
-    // Armazena o objeto no vetor de alunos
-    listaAlunos.push(novoAluno);
+    // 3. Colocar o objeto dentro do vetor
+    vetorAlunos.push(aluno);
 
-    // Atualiza a interface gráfica (Tabela e Estatísticas)
+    // 4. Limpar as caixinhas para o próximo cadastro
+    document.getElementById('nome').value = "";
+    document.getElementById('matricula').value = "";
+    document.getElementById('curso').value = "";
+    document.getElementById('periodo').value = "";
+    document.getElementById('media').value = "";
+
+    // 5. Chamar as funções que atualizam a tela
     atualizarTabela();
-    atualizarEstatisticas();
-
-    // Limpa os campos do formulário para o próximo cadastro
-    formAluno.reset();
-    document.getElementById('nome').focus();
-});
-
-// 4. Função para Manipulação do DOM: Atualizar Tabela de Alunos
-function atualizarTabela() {
-    // Limpa o conteúdo atual do tbody para evitar duplicatas
-    corpoTabela.innerHTML = '';
-
-    // Percorre o vetor de objetos e gera uma nova linha na tabela para cada aluno
-    listaAlunos.forEach(aluno => {
-        const linha = document.createElement('tr');
-
-        linha.innerHTML = `
-            <td>${aluno.nome}</td>
-            <td>${aluno.matricula}</td>
-            <td>${aluno.curso}</td>
-            <td>${aluno.periodo}º</td>
-            <td><strong>${aluno.media.toFixed(1)}</strong></td>
-        `;
-
-        corpoTabela.appendChild(linha);
-    });
+    calcularEstatisticas();
 }
 
-// 5. Função para Calcular e Exibir Estatísticas Automaticamente
-function atualizarEstatisticas() {
-    const totalAlunos = listaAlunos.length;
+// Função para mostrar os alunos na tabela
+function atualizarTabela() {
+    var corpoTabela = document.getElementById('corpo-tabela');
+    
+    // Apaga tudo que tinha antes na tabela para não duplicar
+    corpoTabela.innerHTML = ""; 
 
-    // Atualiza a quantidade total de alunos
-    elTotalAlunos.textContent = totalAlunos;
+    // Um "for" clássico para passar por todos os alunos do vetor
+    for (var i = 0; i < vetorAlunos.length; i++) {
+        var alunoAtual = vetorAlunos[i];
 
-    if (totalAlunos === 0) {
-        elMediaGeral.textContent = '0.00';
+        // Montando o HTML da linha da tabela juntando as strings (+)
+        var linha = "<tr>" +
+                        "<td>" + alunoAtual.nome + "</td>" +
+                        "<td>" + alunoAtual.matricula + "</td>" +
+                        "<td>" + alunoAtual.curso + "</td>" +
+                        "<td>" + alunoAtual.periodo + "</td>" +
+                        "<td>" + alunoAtual.media + "</td>" +
+                    "</tr>";
+        
+        // Adiciona a linha no corpo da tabela
+        corpoTabela.innerHTML += linha;
+    }
+}
+
+// Função para fazer as contas das estatísticas
+function calcularEstatisticas() {
+    var quantidade = vetorAlunos.length;
+    
+    // Atualiza o total na tela
+    document.getElementById('qtd-alunos').innerHTML = quantidade;
+
+    // Se não tiver ninguém, não faz a conta da média
+    if (quantidade == 0) {
+        document.getElementById('media-turma').innerHTML = "0.00";
         return;
     }
 
-    // Calcula a soma de todas as médias usando o método reduce
-    const somaMedias = listaAlunos.reduce((acumulador, aluno) => acumulador + aluno.media, 0);
-    
-    // Calcula a média geral da turma
-    const mediaGeral = somaMedias / totalAlunos;
+    // Somar todas as médias
+    var somaDasMedias = 0;
+    for (var i = 0; i < quantidade; i++) {
+        somaDasMedias = somaDasMedias + vetorAlunos[i].media;
+    }
 
-    // Exibe a média formatada com duas casas decimais
-    elMediaGeral.textContent = mediaGeral.toFixed(2);}
+    // Dividir a soma pela quantidade de alunos
+    var mediaGeral = somaDasMedias / quantidade;
+
+    // Atualiza a média na tela, fixando 2 casas decimais
+    document.getElementById('media-turma').innerHTML = mediaGeral.toFixed(2);
+}
