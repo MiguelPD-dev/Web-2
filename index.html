@@ -27,8 +27,15 @@
         <input type="number" id="media"><br><br>
 
         <button onclick="cadastrarAluno()">Salvar Aluno</button>
+        
+        <p id="msg-alerta"></p>
     </div>
 
+    <div class="caixa" style="text-align: center;"></div>
+        <button type="button" onclick="alternarTabela()">Esconder / Mostrar Tabela</button>
+        <button type="button" onclick="destacarPainel()">Destacar Formulário</button>
+    </div>
+        
     <div id="caixa-estatisticas" class="caixa">
         <h2>Estatísticas</h2>
         <p>Quantidade de alunos: <strong id="qtd-alunos">0</strong></p>
