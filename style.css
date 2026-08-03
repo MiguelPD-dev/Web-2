@@ -46,13 +46,12 @@ th {
 td {
     padding: 8px;
 }
-/* Classe para mensagem de sucesso (Slide 11 e 12) */
+
 .sucesso {
     color: green;
     font-weight: bold;
 }
 
-/* Classe de destaque ativada via JS (Slide 11 e 14) */
 .destaque {
     border: 3px solid rgb(48, 48, 220) !important;
     background-color:lightblue !important;
