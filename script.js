@@ -90,18 +90,3 @@ function calcularEstatisticas() {
         caixaEstatistica.style.borderColor = "red";
     }
 }
-
-function alternarTabela() {
-    var caixaTabela = document.getElementById("caixa-tabela");
-
-    if (caixaTabela.style.display == "none") {
-        caixaTabela.style.display = "block";
-    } else {
-        caixaTabela.style.display = "none";
-    }
-}
-
-function destacarPainel() {
-    var caixaCadastro = document.getElementById("caixa-cadastro");
-    caixaCadastro.classList.toggle("destaque");
-}

@@ -51,8 +51,3 @@ td {
     color: green;
     font-weight: bold;
 }
-
-.destaque {
-    border: 3px solid rgb(48, 48, 220) !important;
-    background-color:lightblue !important;
-}
